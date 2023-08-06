@@ -5,9 +5,12 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.techbee.Model.Product;
 import com.techbee.Model.ShoppingCart;
 
+@Repository
 public class ShoppingCartDAO {
     private StoreDAO storeDAO;
     private ShoppingCart shoppingCart;
@@ -31,10 +34,10 @@ public class ShoppingCartDAO {
     }
 
     public Product addProduct(String prdName, int quantity) {
-        Product product =  null;
+        Product product = null;
         int productsInCart = shoppingCart.getProductsInCart();
         if ((productsInCart + quantity) <= shoppingCart.getProductsQuantityLimit()) {
-            Product prd = getProductByName(prdName);
+            Product prd = getProductInCartByName(prdName);
             if (prd != null) {
                 int pos = shoppingCart.getProducts().indexOf(prd);
                 product = shoppingCart.getProducts().get(pos);
@@ -45,7 +48,7 @@ public class ShoppingCartDAO {
                     return product;
                 }
             } else {
-                product = storeDAO.searchProductInInventory(prdName);
+                product = storeDAO.getProductInInventoryByName(prdName);
                 if (product != null) {
                     if ((product.getProductQuantity() + quantity) <= product.getProductQuantityLimit()) {
                         product.setProductQuantity(quantity);
@@ -63,7 +66,7 @@ public class ShoppingCartDAO {
     public Product deleteProduct(String prdName, int quantity) {
         Product product = null;
         if (!shoppingCart.getProducts().isEmpty()) {
-            product = getProductByName(prdName);
+            product = getProductInCartByName(prdName);
             if (product != null) {
                 int productsInCart = shoppingCart.getProductsInCart();
                 if ((product.getProductQuantity() - quantity) <= 0) {
@@ -85,7 +88,7 @@ public class ShoppingCartDAO {
         return product;
     }
 
-    public Product getProductByName(String prdName) {
+    public Product getProductInCartByName(String prdName) {
         for (Product product : shoppingCart.getProducts()) {
             if (product.getProductName().equals(prdName)) {
                 return product;
@@ -96,8 +99,8 @@ public class ShoppingCartDAO {
 
     public Product editProductQuantity(String prdName, int quantity) {
         Product prd = null;
-        if (!shoppingCart.getProducts().isEmpty()){
-            prd = getProductByName(prdName);
+        if (!shoppingCart.getProducts().isEmpty()) {
+            prd = getProductInCartByName(prdName);
             if (prd != null) {
                 int pos = shoppingCart.getProducts().indexOf(prd);
                 prd = shoppingCart.getProducts().get(pos);
@@ -114,7 +117,7 @@ public class ShoppingCartDAO {
     public List<Product> showProductsAlphabetical() {
         LinkedList<Product> productsList = new LinkedList<>(getAllProductsInCart());
         Collections.sort(getAllProductsInCart(), Comparator.comparing(Product::getProductName));
-        return  productsList ; 
+        return productsList;
     }
 
     public List<Product> getAllProductsInCart() {

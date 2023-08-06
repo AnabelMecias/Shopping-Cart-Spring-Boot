@@ -3,9 +3,12 @@ package com.techbee.DAO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.techbee.Model.Product;
 import com.techbee.Model.Store;
 
+@Repository
 public class StoreDAO {
     private Store store;
 
@@ -15,12 +18,7 @@ public class StoreDAO {
     public Store getStore() {
         return store;
     }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Product searchProductInInventory(String prdName) {
+    public Product getProductInInventoryByName(String prdName) {
         List<Product> products = store.getProductsAvailables();
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getProductName().equals(prdName)) {
