@@ -17,13 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techbee.Service.ShoppingCartService;
 import com.techbee.Service.StoreService;
 import com.techbee.Model.Product;
-import com.techbee.Service.ProductService;
 
 @RestController
 public class ShoppingCartController {
-    
-    @Autowired
-    private ProductService productService;
 
     @Autowired
     private ShoppingCartService shoppingCartService;
@@ -97,11 +93,5 @@ public class ShoppingCartController {
     public Product deleteProduct(@PathVariable("name") String prdName,@PathVariable("quantity") int quantity) {
         return shoppingCartService.deleteProduct(prdName, quantity);
      }
-    
-
-    @RequestMapping(method = RequestMethod.GET)
-    public String getMessageProductTest (){
-        return productService.getMessageProductTest();
-    }
 }
 
